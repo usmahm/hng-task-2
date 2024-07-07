@@ -32,6 +32,7 @@ const User = sequelize.define("User", {
 });
 
 User.belongsToMany(Organisation, { through: "UserOrganisations" });
+Organisation.belongsToMany(User, { through: "UserOrganisations" });
 
 // User.hasMany
 module.exports = User;
