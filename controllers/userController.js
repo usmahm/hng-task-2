@@ -33,7 +33,6 @@ const getUser = async (req, res, next) => {
     } else {
       const organisations = await getSharedOrgs(req.userId, userId);
 
-      console.log("results", organisations.length, organisations);
       if (organisations.length == 0) {
         const error = new Error();
         error.statusCode = 404;

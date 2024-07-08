@@ -32,7 +32,6 @@ app.use((error, req, res, next) => {
   sendResponse(res, status, body);
 });
 
-console.log("ABBBBB");
 sequelize
   .authenticate()
   .then(() => {
@@ -48,9 +47,5 @@ sequelize
     console.log("Unable to connect to db");
     console.log(err);
   });
-
-// app.listen(process.env.PORT || 3000, () => {
-//   console.log(`Listening on port ${process.env.PORT || 3000}`);
-// });
 
 module.exports = app;

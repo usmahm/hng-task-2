@@ -29,7 +29,7 @@ router.post(
   authController.signup
 );
 
-router.get(
+router.post(
   "/login",
   [body("email").trim().notEmpty(), body("password").trim().notEmpty()],
   authController.login

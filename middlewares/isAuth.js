@@ -12,7 +12,7 @@ const isAuth = (req, res, next) => {
       throw new Error();
     }
 
-    console.log("decoded", decoded);
+    // console.log("decoded", decoded);
     req.userId = decoded.userId;
   } catch {
     const error = new Error("Unauthorized to access resource");

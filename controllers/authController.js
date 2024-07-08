@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 const { createUser, findUserByEmail } = require("../models/userModel");
 const customValidationResults = require("../utils/customValidationResults");
@@ -22,12 +23,12 @@ const signup = async (req, res, next) => {
     const errors = customValidationResults(req);
     if (!errors.isEmpty()) {
       const error = new Error("Validation failed!");
-      // error.statusCode = 400;
       error.statusCode = 422;
       error.body = {
         status: "Bad request",
         message: "Invalid data provided",
         errors: errors.array(),
+        statusCode: 422,
       };
       throw error;
     }
@@ -80,6 +81,7 @@ const login = async (req, res, next) => {
         status: "Bad request",
         message: "Invalid data provided",
         errors: errors.array(),
+        statusCode: 422,
       };
       throw error;
     }
@@ -93,12 +95,11 @@ const login = async (req, res, next) => {
       "password",
     ]);
 
-    console.log(user);
-
     if (!user) {
       sendResponse(res, 401, {
         status: "Bad request",
         message: "Authentication failed",
+        statusCode: 401,
       });
     }
 

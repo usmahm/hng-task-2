@@ -19,8 +19,6 @@ const getAllOrganisations = async (req, res, next) => {
 
     const organisations = user.Organisations;
 
-    console.log("organisations", organisations);
-
     sendResponse(res, 200, {
       satus: "success",
       message: "User Organisations succefully fetched",
@@ -88,8 +86,6 @@ const createOrganisation = async (req, res, next) => {
       currentUser
     );
 
-    console.log("JJJ", createdOrganisation);
-
     sendResponse(res, 201, {
       status: "success",
       message: "Organisation created successfully",
@@ -100,12 +96,12 @@ const createOrganisation = async (req, res, next) => {
       },
     });
   } catch (err) {
-    console.log("eerer", err);
     next(err);
   }
 };
 
 const addUserToOrganisation = async (req, res, next) => {
+  console.log("INNNN", req.body.userId);
   try {
     if (!req.body.userId) {
       const error = new Error();
@@ -119,6 +115,7 @@ const addUserToOrganisation = async (req, res, next) => {
 
     const user = await findUserById(req.body.userId);
 
+    console.log("user", user);
     if (!user) {
       const error = new Error();
       error.statusCode = 400;
@@ -129,7 +126,6 @@ const addUserToOrganisation = async (req, res, next) => {
       throw error;
     }
 
-    console.log("ORGG", req.params);
     const organisation = await findUserOrganisationById(
       req.params.orgId,
       req.userId
@@ -150,7 +146,7 @@ const addUserToOrganisation = async (req, res, next) => {
       message: "User added to organisation successfully",
     });
   } catch (err) {
-    // console.log("err", err);
+    console.log("err", err);
     next(err);
   }
 };
