@@ -199,15 +199,13 @@ The goal is to ensure the POST /auth/register endpoint works correctly by perfor
   - The test file should be named auth.spec.ext (ext is the file extension of your chosen language) inside a folder named tests . For example tests/auth.spec.ts assuming I’m using Typescript
 
 Test Scenarios:
-  - It Should Register User Successfully with Default Organisation:Ensure a user is registered successfully when no organisation details are provided.
+  - It Should Register User Successfully with Default Organisation: Ensure a user is registered successfully when no organisation details are provided.
   - Verify the default organisation name is correctly generated (e.g., "John's Organisation" for a user with the first name "John").
   - Check that the response contains the expected user details and access token.
-  - It Should Log the user in successfully:Ensure a user is logged in successfully when a valid credential is provided and fails otherwise.
+  - It Should Log the user in successfully: Ensure a user is logged in successfully when a valid credential is provided and fails otherwise.
   - Check that the response contains the expected user details and access token.
-  - It Should Fail If Required Fields Are Missing:Test cases for each required field (firstName, lastName, email, password) missing.
+  - It Should Fail If Required Fields Are Missing: Test cases for each required field (firstName, lastName, email, password) missing.
   - Verify the response contains a status code of 422 and appropriate error messages.
-  - It Should Fail if there’s Duplicate Email or UserID:Attempt to register two users with the same email.
+  - It Should Fail if there’s Duplicate Email or UserID :Attempt to register two users with the same email.
   - Verify the response contains a status code of 422 and appropriate error messages.
 
-
-- remove .datavalues from other queries

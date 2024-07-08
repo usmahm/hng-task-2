@@ -32,14 +32,21 @@ const createNewOrganisation = async (name, description, user) => {
   return newOrg;
 };
 
-const findOrganisationById = async (orgId, attributesToInclude) => {
-  return await Organisation.findByPk(orgId, {
-    attributes: attributesToInclude,
-  });
-};
+// const findOrganisationById = async (orgId, attributesToInclude) => {
+//   return await Organisation.findOne({
+//     where: { orgId: orgId },
+//     attributes: attributesToInclude,
+//     include: {
+//       model: User,
+//       where: { userId: currentUserId },
+//       attributes: [],
+//       through: { attributes: [] },
+//     },
+//   });
+// };
 
 module.exports = {
   Organisation,
   createNewOrganisation,
-  findOrganisationById,
+  // findOrganisationById,
 };

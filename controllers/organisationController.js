@@ -1,16 +1,43 @@
-const Organisation = require("../models/organisation");
-const { findUserById, getUserOrganisations } = require("../models/User");
+const Organisation = require("../models/organisationModel");
 const {
-  createNewOrganisation,
-  findOrganisationById,
-} = require("../models/organisation");
+  findUserById,
+  getUserOrganisations,
+  findUserOrganisationById,
+} = require("../models/userModel");
+const { createNewOrganisation } = require("../models/organisationModel");
 const customValidationResults = require("../utils/customValidationResults");
 const sendResponse = require("../utils/sendResponse");
 
+const getAllOrganisations = async (req, res, next) => {
+  try {
+    const user = await getUserOrganisations(req.userId);
+
+    if (!user) {
+      // An internal error, because it shouldn't be possible to reach here since it is protected
+      const error = new Error();
+    }
+
+    const organisations = user.Organisations;
+
+    console.log("organisations", organisations);
+
+    sendResponse(res, 200, {
+      satus: "success",
+      message: "User Organisations succefully fetched",
+      data: {
+        organisations: organisations,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 const getOrganisationById = async (req, res, next) => {
   try {
-    const organisation = await findOrganisationById(
+    const organisation = await findUserOrganisationById(
       req.params.orgId,
+      req.userId,
       (attributesToInclude = ["orgId", "name", "description"])
     );
 
@@ -103,13 +130,16 @@ const addUserToOrganisation = async (req, res, next) => {
     }
 
     console.log("ORGG", req.params);
-    const organisation = await findOrganisationById(req.params.orgId);
+    const organisation = await findUserOrganisationById(
+      req.params.orgId,
+      req.userId
+    );
     if (!organisation) {
       const error = new Error();
       error.statusCode = 400;
       error.body = {
         status: "Bad Request",
-        message: `Organisation doens't not exist!`,
+        message: `Organisation not found!`,
       };
       throw error;
     }
@@ -121,31 +151,6 @@ const addUserToOrganisation = async (req, res, next) => {
     });
   } catch (err) {
     // console.log("err", err);
-    next(err);
-  }
-};
-
-const getAllOrganisations = async (req, res, next) => {
-  try {
-    const user = await getUserOrganisations(req.userId);
-
-    if (!user) {
-      // An internal error, because it shouldn't be possible to reach here since it is protected
-      const error = new Error();
-    }
-
-    const organisations = user.Organisations;
-
-    console.log("organisations", organisations);
-
-    sendResponse(res, 200, {
-      satus: "success",
-      message: "User Organisations succefully fetched",
-      data: {
-        organisations: organisations,
-      },
-    });
-  } catch (err) {
     next(err);
   }
 };

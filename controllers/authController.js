@@ -1,10 +1,10 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const { createUser, findUserByEmail } = require("../models/User");
+const { createUser, findUserByEmail } = require("../models/userModel");
 const customValidationResults = require("../utils/customValidationResults");
 const sendResponse = require("../utils/sendResponse");
-const { createNewOrganisation } = require("../models/organisation");
+const { createNewOrganisation } = require("../models/organisationModel");
 
 const generateAuthToken = (email, userId) => {
   return jwt.sign(
@@ -12,8 +12,8 @@ const generateAuthToken = (email, userId) => {
       email: email,
       userId: userId,
     },
-    process.env.JWT_SECRET
-    // { expiresIn: "1h" }
+    process.env.JWT_SECRET,
+    { expiresIn: "1h" }
   );
 };
 
@@ -22,10 +22,11 @@ const signup = async (req, res, next) => {
     const errors = customValidationResults(req);
     if (!errors.isEmpty()) {
       const error = new Error("Validation failed!");
-      error.statusCode = 400;
+      // error.statusCode = 400;
+      error.statusCode = 422;
       error.body = {
         status: "Bad request",
-        message: "Registration unsuccessful",
+        message: "Invalid data provided",
         errors: errors.array(),
       };
       throw error;
@@ -71,6 +72,18 @@ const signup = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
+    const errors = customValidationResults(req);
+    if (!errors.isEmpty()) {
+      const error = new Error();
+      error.statusCode = 422;
+      error.body = {
+        status: "Bad request",
+        message: "Invalid data provided",
+        errors: errors.array(),
+      };
+      throw error;
+    }
+
     let user = await findUserByEmail(req.body.email, [
       "userId",
       "firstName",

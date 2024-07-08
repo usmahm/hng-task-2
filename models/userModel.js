@@ -1,7 +1,7 @@
 const { DataTypes, Op } = require("sequelize");
 
 const sequelize = require("../config/dbConnection");
-const { Organisation } = require("./organisation");
+const { Organisation } = require("./organisationModel");
 
 const User = sequelize.define("User", {
   userId: {
@@ -75,6 +75,7 @@ const getUserOrganisations = async (userId) => {
   });
 };
 
+// Added here to prevent cyclic dependency issue
 const getSharedOrgs = async (currentUserId, userId) => {
   return await Organisation.count({
     include: [
@@ -89,6 +90,23 @@ const getSharedOrgs = async (currentUserId, userId) => {
   });
 };
 
+const findUserOrganisationById = async (
+  orgId,
+  currentUserId,
+  attributesToInclude
+) => {
+  return await Organisation.findOne({
+    where: { orgId: orgId },
+    attributes: attributesToInclude,
+    include: {
+      model: User,
+      where: { userId: currentUserId },
+      attributes: [],
+      through: { attributes: [] },
+    },
+  });
+};
+
 // User.hasMany
 module.exports = {
   User,
@@ -97,4 +115,5 @@ module.exports = {
   findUserByEmail,
   getUserOrganisations,
   getSharedOrgs,
+  findUserOrganisationById,
 };

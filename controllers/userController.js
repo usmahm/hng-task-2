@@ -1,8 +1,8 @@
 const bcrypt = require("bcrypt");
-const { findUserById, getSharedOrgs, User } = require("../models/User");
+const { findUserById, getSharedOrgs, User } = require("../models/userModel");
 const sendResponse = require("../utils/sendResponse");
 const { use } = require("bcrypt/promises");
-const { Organisation } = require("../models/organisation");
+const { Organisation } = require("../models/organisationModel");
 const { Op } = require("sequelize");
 const sequelize = require("../config/dbConnection");
 

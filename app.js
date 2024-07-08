@@ -28,6 +28,7 @@ app.use((req, res) => {
 app.use((error, req, res, next) => {
   const status = error.statusCode || 500;
   const body = error.body || { message: "An internal error occured" };
+  console.log(`\nERROR - statusCode=${status}, body=${JSON.stringify(body)}\n`);
   sendResponse(res, status, body);
 });
 
@@ -51,3 +52,5 @@ sequelize
 // app.listen(process.env.PORT || 3000, () => {
 //   console.log(`Listening on port ${process.env.PORT || 3000}`);
 // });
+
+module.exports = app;

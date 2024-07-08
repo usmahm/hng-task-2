@@ -12,6 +12,12 @@ router.get(
   organisationController.getAllOrganisations
 );
 
+router.get(
+  "/organisations/:orgId",
+  isAuth,
+  organisationController.getOrganisationById
+);
+
 router.post(
   "/organisations",
   isAuth,
@@ -23,12 +29,6 @@ router.post(
   "/organisations/:orgId/users",
   isAuth,
   organisationController.addUserToOrganisation
-);
-
-router.get(
-  "/organisations/:orgId",
-  isAuth,
-  organisationController.getOrganisationById
 );
 
 module.exports = router;

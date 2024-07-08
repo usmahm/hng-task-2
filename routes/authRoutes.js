@@ -1,5 +1,5 @@
 const express = require("express");
-const { findUserByEmail } = require("../models/User");
+const { findUserByEmail } = require("../models/userModel");
 
 const authController = require("../controllers/authController");
 const { body } = require("express-validator");
@@ -29,6 +29,10 @@ router.post(
   authController.signup
 );
 
-router.get("/login", authController.login);
+router.get(
+  "/login",
+  [body("email").trim().notEmpty(), body("password").trim().notEmpty()],
+  authController.login
+);
 
 module.exports = router;
