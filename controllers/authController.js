@@ -134,4 +134,5 @@ const login = async (req, res, next) => {
 module.exports = {
   signup,
   login,
+  generateAuthToken,
 };
