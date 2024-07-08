@@ -1,10 +1,13 @@
 const jwt = require("jsonwebtoken");
 
 const isAuth = (req, res, next) => {
-  const token = req.get("Authorization").split(" ")[1];
-
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const authToken = req.get("Authorization");
+    if (!authToken) {
+      throw new Error();
+    }
+
+    const decoded = jwt.verify(authToken.split(" ")[1], process.env.JWT_SECRET);
     if (!decoded) {
       throw new Error();
     }

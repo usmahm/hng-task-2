@@ -1,13 +1,34 @@
 const express = require("express");
+const { body } = require("express-validator");
+
+const isAuth = require("../middlewares/isAuth");
+const organisationController = require("../controllers/organisationController");
 
 const router = express.Router();
 
-// router.get("/organisations/:orgId", organisationController.getOrganisation);
+router.get(
+  "/organisations",
+  isAuth,
+  organisationController.getAllOrganisations
+);
 
-// router.get("/organisations", organisationController.getAllOrganisations);
+router.post(
+  "/organisations",
+  isAuth,
+  body("name").trim().notEmpty(),
+  organisationController.createOrganisation
+);
 
-// router.post("/organisations", organisationController.createOrganisation);
+router.post(
+  "/organisations/:orgId/users",
+  isAuth,
+  organisationController.addUserToOrganisation
+);
 
-// router.post("/organisations/:orgId/users", organisationController.addUserToOrganisation);
+router.get(
+  "/organisations/:orgId",
+  isAuth,
+  organisationController.getOrganisationById
+);
 
 module.exports = router;

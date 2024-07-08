@@ -1,9 +1,10 @@
 const bcrypt = require("bcrypt");
-const User = require("../models/User");
 const jwt = require("jsonwebtoken");
+
+const { createUser, findUserByEmail } = require("../models/User");
 const customValidationResults = require("../utils/customValidationResults");
 const sendResponse = require("../utils/sendResponse");
-const { password } = require("pg/lib/defaults");
+const { createNewOrganisation } = require("../models/organisation");
 
 const generateAuthToken = (email, userId) => {
   return jwt.sign(
@@ -11,8 +12,8 @@ const generateAuthToken = (email, userId) => {
       email: email,
       userId: userId,
     },
-    process.env.JWT_SECRET,
-    { expiresIn: "1h" }
+    process.env.JWT_SECRET
+    // { expiresIn: "1h" }
   );
 };
 
@@ -32,7 +33,7 @@ const signup = async (req, res, next) => {
 
     const hashedPassword = await bcrypt.hash(req.body.password, 12);
 
-    let createdUser = await User.create({
+    let createdUser = await createUser({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       email: req.body.email,
@@ -40,13 +41,14 @@ const signup = async (req, res, next) => {
       phone: req.body.phone,
     });
 
-    createdUser = createdUser.dataValues;
+    // Create default organisation
+    await createNewOrganisation(
+      `${createdUser.firstName}'s Organisation`,
+      "",
+      createdUser
+    );
 
     const token = generateAuthToken(createdUser.email, createdUser.userId);
-
-    // console.log("created", createdUser);
-
-    // console.log("RRR", req.body);
 
     sendResponse(res, 201, {
       status: "success",
@@ -69,17 +71,15 @@ const signup = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    let user = await User.findOne({
-      where: { email: req.body.email },
-      attributes: [
-        "userId",
-        "firstName",
-        "lastName",
-        "email",
-        "phone",
-        "password",
-      ],
-    });
+    let user = await findUserByEmail(req.body.email, [
+      "userId",
+      "firstName",
+      "lastName",
+      "email",
+      "phone",
+      "password",
+    ]);
+
     console.log(user);
 
     if (!user) {
@@ -90,7 +90,6 @@ const login = async (req, res, next) => {
     }
 
     const match = await bcrypt.compare(req.body.password || "", user.password);
-    console.log("MMM", match);
     if (match) {
       const token = generateAuthToken(user.email, user.userId);
 

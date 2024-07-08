@@ -1,5 +1,5 @@
 const express = require("express");
-const User = require("../models/User");
+const { findUserByEmail } = require("../models/User");
 
 const authController = require("../controllers/authController");
 const { body } = require("express-validator");
@@ -13,7 +13,7 @@ router.post(
       .isEmail()
       .withMessage("Please enter a valid email")
       .custom(async (val) => {
-        const user = await User.findOne({ where: { email: val } });
+        const user = await findUserByEmail(val);
         if (user) {
           throw new Error("Email already in use");
         }

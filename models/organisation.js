@@ -14,6 +14,32 @@ const Organisation = sequelize.define("Organisation", {
   description: {
     type: DataTypes.STRING,
   },
+  creatorId: {
+    type: DataTypes.UUID,
+    allowNull: false,
+  },
 });
 
-module.exports = Organisation;
+const createNewOrganisation = async (name, description, user) => {
+  const newOrg = await Organisation.create({
+    name: name,
+    description: description,
+    creatorId: user.userId,
+  });
+
+  await user.addOrganisation(newOrg);
+
+  return newOrg;
+};
+
+const findOrganisationById = async (orgId, attributesToInclude) => {
+  return await Organisation.findByPk(orgId, {
+    attributes: attributesToInclude,
+  });
+};
+
+module.exports = {
+  Organisation,
+  createNewOrganisation,
+  findOrganisationById,
+};

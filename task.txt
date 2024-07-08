@@ -42,7 +42,7 @@ User Authentication and Organisation
 
 
   - Endpoints
-    - [POST] /auth/register Registers a users and creates a default organisation Register request body:
+    - [POST] /auth/register Registers a users and creates a default organisation Register request body: ✅
       {
         "firstName": "string",
         "lastName": "string",
@@ -73,7 +73,7 @@ User Authentication and Organisation
             "statusCode": 400
           }
 
-    - [POST] /auth/login : logs in a user. When you log in, you can select an organisation to interact with
+    - [POST] /auth/login : logs in a user. When you log in, you can select an organisation to interact with ✅
       - return JWT token
       - restrict access to protected endpoints swith JWT token
 
@@ -106,7 +106,7 @@ User Authentication and Organisation
           "statusCode": 401
         }
 
-    - [GET] /api/users/:id : a user gets their own record or user record in organisations they belong to or created [PROTECTED].
+    - [GET] /api/users/:id : a user gets their own record or user record in organisations they belong to or created [PROTECTED]. ✅
       - Successful response: Return the payload below with a 200 success status code.
         {
           "status": "success",
@@ -121,7 +121,7 @@ User Authentication and Organisation
         }
     
     [GET] /api/organisations : gets all your organisations the user belongs to or created. If a user is logged in properly, they can get all their organisations. They should not get another user’s organisation [PROTECTED].
-       - Successful response: Return the payload below with a 200 success status code.
+       - Successful response: Return the payload below with a 200 success status code. ✅
         {
           "status": "success",
           "message": "<message>",
@@ -136,7 +136,7 @@ User Authentication and Organisation
           }
         }
 
-    [GET] /api/organisations/:orgId the logged in user gets a single organisation record [PROTECTED]
+    [GET] /api/organisations/:orgId the logged in user gets a single organisation record [PROTECTED] ✅
       - Successful response: Return the payload below with a 200 success status code.
         {
           "status": "success",
@@ -148,7 +148,7 @@ User Authentication and Organisation
           }
         }
 
-    [POST] /api/organisations : a user can create their new organisation [PROTECTED].
+    [POST] /api/organisations : a user can create their new organisation [PROTECTED]. ✅
       - Request body: request body must be validated
         {
           "name": "string", // Required and cannot be null
@@ -173,7 +173,7 @@ User Authentication and Organisation
           "statusCode": 400
         }
 
-    [POST] /api/organisations/:orgId/users : adds a user to a particular organisation
+    [POST] /api/organisations/:orgId/users : adds a user to a particular organisation ✅
       - Request body:
         {
           "userId": "string"
@@ -208,3 +208,6 @@ Test Scenarios:
   - Verify the response contains a status code of 422 and appropriate error messages.
   - It Should Fail if there’s Duplicate Email or UserID:Attempt to register two users with the same email.
   - Verify the response contains a status code of 422 and appropriate error messages.
+
+
+- remove .datavalues from other queries
